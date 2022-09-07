@@ -63,6 +63,7 @@
     </mat-form-field>
     <br />
     <div>
+      <img [src]="base64OrNot(this.form.get('coverPhoto')?.value) ? this.form.get('coverPhoto')?.value : imageUri(this.form.get('coverPhoto')?.value)">
       <input
         #pngInput
         hidden="true"

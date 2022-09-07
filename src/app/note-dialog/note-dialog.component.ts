@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Buffer } from 'buffer';
 import { NoteService } from '../services/note.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-note-dialog',
@@ -13,6 +14,7 @@ export class NoteDialogComponent implements OnInit {
   dialogTitle: string = '';
   inEdit: boolean = false;
   fileName: string = '';
+  backendUri: string = environment.backendUri;
 
   form: FormGroup = new FormGroup({
     title: new FormControl('', [Validators.required]),
@@ -30,6 +32,7 @@ export class NoteDialogComponent implements OnInit {
     if (this.data.note) {
       this.dialogTitle = 'Note details';
       this.form.patchValue(this.data.note);
+      this.fileName = this.data.note.coverPhoto;
       this.form.disable();
     } else {
       this.dialogTitle = 'Add new note';
@@ -90,10 +93,18 @@ export class NoteDialogComponent implements OnInit {
     reader.readAsDataURL(file);
     reader.onload = () => {
       console.log(reader.result);
-      if (reader.result)
+      if (reader.result){
         this.form.patchValue({
           coverPhoto: reader.result
-        });
+        });;
+      }
     };
+  }
+  
+  base64OrNot(str: string){
+    return /^data:image\/png/.test(str);
+  }
+  imageUri(str: string){
+    return (str == null || str.length == 0) ? this.backendUri+'images/default.jpg' : this.backendUri+'storage/images/uploads/'+str;
   }
 }
