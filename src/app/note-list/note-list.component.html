@@ -1,0 +1,28 @@
+<div>
+  <button (click)="openDialog(undefined)" mat-flat-button color="primary" class="margined">
+    Add note<mat-icon>add</mat-icon>
+  </button>
+  <form>
+    <mat-form-field appearance="fill"  class="margined">
+      <input matInput type="text" (change)="filterChange($event)" placeholder="Search by title">
+    </mat-form-field>
+  </form>
+  <mat-divider></mat-divider>
+  <mat-grid-list cols="2" rowheight="2:1">
+    <mat-grid-tile *ngFor="let note of notes">
+      <mat-card (click)="openDialog(note)">
+        <mat-card-title>
+          {{ note.title }}
+        </mat-card-title>
+        <img
+          mat-card-image
+          [src]="
+            backendUri +
+            'storage/images/' +
+            (note.coverPhoto != null ? 'uploads/'+note.coverPhoto : 'default.jpg')
+          "
+        />
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

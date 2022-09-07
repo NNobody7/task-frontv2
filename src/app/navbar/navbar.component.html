@@ -1,0 +1,7 @@
+<p *ngIf="navbarService.visible">
+  <mat-toolbar color="primary">
+    <span>Task App</span>
+    <span style="margin-left: auto; margin-right: 0;">
+      <button mat-fab color="accent" (click)="auth.onLogout()"><mat-icon>logout</mat-icon></button></span>
+  </mat-toolbar>
+</p>

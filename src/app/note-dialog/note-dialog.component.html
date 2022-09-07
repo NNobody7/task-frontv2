@@ -1,0 +1,105 @@
+<div>
+  <h2 mat-dialog-title>{{ dialogTitle }}</h2>
+  <div class="buttons-row">
+    <button
+      style="margin-right: 0.2rem"
+      mat-flat-button
+      color="primary"
+      (click)="toogleEdit()"
+      *ngIf="!inEdit"
+    >
+      Edit
+    </button>
+    <button
+      style="margin-left: 0.2rem"
+      mat-flat-button
+      color="warn"
+      (click)="deleteNote()"
+      *ngIf="!inEdit"
+    >
+      Delete
+    </button>
+  </div>
+</div>
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="form">
+    <mat-form-field appearance="fill">
+      <mat-label>Title</mat-label>
+      <input matInput type="text" formControlName="title" />
+      <div
+        *ngIf="
+          form.controls['title'].invalid &&
+          (form.controls['title'].dirty || form.controls['title'].touched)
+        "
+        class="form-alert"
+      >
+        <div *ngIf="form.controls['title'].errors?.['required']">
+          Note title is required
+        </div>
+      </div>
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="fill">
+      <mat-label>Note text</mat-label>
+      <textarea
+        matInput
+        cdkTextareaAutosize
+        #autosize="cdkTextareaAutosize"
+        cdkAutosizeMinRows="3"
+        cdkAutosizeMaxRows="10"
+        formControlName="content"
+      ></textarea>
+      <div
+        *ngIf="
+          form.controls['content'].invalid &&
+          (form.controls['content'].dirty || form.controls['content'].touched)
+        "
+        class="form-alert"
+      >
+        <div *ngIf="form.controls['content'].errors?.['required']">
+          Note content is required
+        </div>
+      </div>
+    </mat-form-field>
+    <br />
+    <div>
+      <input
+        #pngInput
+        hidden="true"
+        type="file"
+        (change)="handleUpload($event)"
+        accept=".png"
+      />
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        (click)="pngInput.click()"
+        [disabled]="!inEdit"
+      >
+        {{ fileName == "" ? "Choose note image (JPEG)" : fileName }}
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button mat-dialog-close>Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="addNote()"
+    *ngIf="inEdit && !this.data.note"
+    [disabled]="!form.valid"
+  >
+    Add
+  </button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="updateNote()"
+    *ngIf="inEdit && this.data.note"
+    [disabled]="!form.valid"
+  >
+    Update
+  </button>
+</mat-dialog-actions>
